@@ -14,8 +14,10 @@
 ## 问题:
 
 ### 写出公式L(n); n表示直线数量, L(n)表示通过n根直线可以划分出的最多的空间数量
+## 答：
+L(n)=(n+1)*n/2+1
 
-## 使用C语言实现计算L(n)的函数:
+### 使用C语言实现计算L(n)的函数:
 ```c
  int calc_spaces(int n); // n >= 0
  ```
@@ -133,24 +135,51 @@ int main(void) {
 ## 答：
 ```c
 Queue *enqueue(Queue* queue, int data){
-    push(queue, data);
+    if(is_empty(queue)){
+        push(queue, data);
+    }
+    else{
+        Stack *substack = init_stack();
+        while(!is_empty(queue)){
+            int i = pop(queue);
+            push(substack, i);
+        }
+        push(queue, data);
+        while (!is_empty(substack)) {
+            int r = pop(substack);
+            push(queue, r);
+        }
+    }
     return queue;
 }
 
 int dequeue(Queue* queue){
-    Queue *pre = queue;
-    Queue *pos = pre->next;
-    if(pos==NULL){
-        printf("队列已空\n");
-        return -1;
-    }
-    while(pos!=NULL&&pos->next!=NULL){
-        pre=pos;
-        pos=pos->next;
-    }
-    int i = pop(pre);
-    return i;
+    int j = pop(queue);
+    return j;
 }
+
+
+
+//
+// Queue *enqueue(Queue* queue, int data){
+//     push(queue, data);
+//     return queue;
+// }
+
+// int dequeue(Queue* queue){
+//     Queue *pre = queue;
+//     Queue *pos = pre->next;
+//     if(pos==NULL){
+//         printf("队列已空\n");
+//         return -1;
+//     }
+//     while(pos!=NULL&&pos->next!=NULL){
+//         pre=pos;
+//         pos=pos->next;
+//     }
+//     int i = pop(pre);
+//     return i;
+// }
 
 
 ```
